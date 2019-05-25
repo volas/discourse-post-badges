@@ -29,7 +29,10 @@
                 image: badge.image,
                 className: badgeClass[badge.badge_type_id-1],
                 title: badge.description,
-                url: `/badges/${badge.id}/${badge.slug}` + badge_page
+                url: `/badges/${badge.id}/${badge.slug}` + badge_page,
+                related_posts: response.user_badges
+                  .filter(user_badge => user_badge.badge_id === badge.id && user_badge.topic_id && user_badge.post_number)
+                  .map(user_badge => (user_badge.topic_id + ":" +  user_badge.post_number))
               });
               badgeCache[username] = badgeArray;
               dec.widget.scheduleRerender();
@@ -55,7 +58,9 @@
     let posterBadges = [];
     if (badgeCache[username]) {
       badgeCache[username].forEach(badgeParts => {
-        posterBadges.push(buildBadge(badgeParts))
+        if(badgeParts.related_posts.indexOf(dec.attrs.topicId + ":" + dec.attrs.post_number) !== -1) {
+          posterBadges.push(buildBadge(badgeParts))
+        }
       });
     }
     return posterBadges;

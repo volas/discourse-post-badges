@@ -14,3 +14,7 @@ badge_link_destination:
   description: 
     en: "Where a user will be taken when they click on a
          post badge."
+related_badges:
+  default: false
+  description:
+    en: "Show badges only on related posts."
